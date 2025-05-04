@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Multi Auto Web Opener",
+  "version": "1.0",
+  "description": "Set multiple tasks to open web pages at custom intervals.",
+  "permissions": ["storage", "alarms", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

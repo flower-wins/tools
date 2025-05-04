@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Set Tasks</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 10px;
+      width: 400px;   /* 放大宽度 */
+      height: 500px;  /* 放大高度 */
+      overflow-y: auto;
+    }
+    input {
+      margin: 5px 0;
+      width: 100%;
+    }
+    button {
+      margin-top: 10px;
+    }
+    .task {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Set Auto Open Tasks</h2>
+  <input type="text" id="url" placeholder="Enter URL (e.g. https://example.com)" />
+  <input type="number" id="interval" placeholder="Interval in days (e.g. 45)" />
+  <button id="addTask">Add Task</button>
+  <h3>Current Tasks</h3>
+  <div id="taskList"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
