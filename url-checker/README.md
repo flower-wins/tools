@@ -43,6 +43,108 @@ crontab -e
 
 ## 🔐 安全提示
 
+部署步骤：
+连接到你的 VPS：
+使用 SSH 连接到你的 VPS。
+
+bash
+复制
+编辑
+ssh user@your_vps_ip
+下载 deploy_url_checker.sh 脚本：
+你可以通过 wget 或 curl 命令直接从 GitHub 下载脚本。
+
+bash
+复制
+编辑
+wget https://raw.githubusercontent.com/flower-wins/tools/main/url-checker/deploy_url_checker.sh -O deploy_url_checker.sh
+或者，使用 curl：
+
+bash
+复制
+编辑
+curl -o deploy_url_checker.sh https://raw.githubusercontent.com/flower-wins/tools/main/url-checker/deploy_url_checker.sh
+赋予脚本执行权限：
+执行以下命令为脚本添加执行权限。
+
+bash
+复制
+编辑
+chmod +x deploy_url_checker.sh
+运行脚本进行部署：
+运行脚本来部署 URL 检查器。
+
+bash
+复制
+编辑
+sudo ./deploy_url_checker.sh
+这会完成以下操作：
+
+克隆 GitHub 仓库。
+
+安装必备的依赖，如 git、curl、mailutils 和 cron。
+
+配置 .env 文件和 cron 定时任务。
+
+赋予 check_urls.sh 执行权限。
+
+配置定时任务每分钟检查 URL，每天清空日志。
+
+检查 URL 检查器是否工作正常：
+脚本运行完成后，你可以查看定时任务是否已成功设置：
+
+bash
+复制
+编辑
+crontab -l
+你会看到类似下面的输出：
+
+ruby
+复制
+编辑
+* * * * * /opt/tools/url-checker/check_urls.sh
+0 0 * * * echo "" > /opt/tools/url-checker/url_check.log
+这表明脚本会每分钟运行一次，并且每天会清空日志文件。
+
+修改配置文件（如果需要）：
+
+如果需要修改 URL 列表、通知设置等，编辑 .env 文件。
+
+bash
+复制
+编辑
+nano /opt/tools/url-checker/.env
+修改后，保存并退出编辑器。
+
+常见问题排查：
+Cron 不工作：
+如果你的定时任务没有按预期工作，检查 cron 服务是否正常运行：
+
+bash
+复制
+编辑
+sudo service cron status
+如果没有运行，可以启动 cron 服务：
+
+bash
+复制
+编辑
+sudo service cron start
+通知不发送：
+如果你配置了 Telegram 或邮件通知，但没有收到通知：
+
+确保 .env 中配置了正确的 Telegram bot token 和 chat ID，或者正确的邮件地址。
+
+确保 mailutils 已安装（邮件通知）。
+
+查看日志：
+你可以查看生成的日志文件，了解 URL 检查结果：
+
+bash
+复制
+编辑
+cat /opt/tools/url-checker/url_check.log
+
 
 ✅ 部署脚本 (deploy_url_checker.sh)
 你可以将以下内容保存为 deploy_url_checker.sh，然后运行它来自动部署。
