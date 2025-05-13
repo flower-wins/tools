@@ -22,19 +22,29 @@ fi
 # === 检查 URL 状态 ===
 for URL in $URLS; do
   STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+  BODY=$(curl -s --max-time 10 "$URL")
 
-  if [ "$STATUS" != "200" ]; then
-    MESSAGE="[$TIMESTAMP] ❌ $URL failed (Status: $STATUS)"
+  # 判断是否为 Base64 编码
+  if [[ "$STATUS" != "200" || ! "$BODY" =~ ^[A-Za-z0-9+/=]+$ ]]; then
+    MESSAGE="[$TIMESTAMP] ❌ $URL failed (Status: $STATUS, Not Base64)"
     echo "$MESSAGE" >> "$LOG_FILE"
-
-    # Telegram 通知（如有配置）
-    if [[ -n "$TG_BOT_TOKEN" && -n "$TG_CHAT_ID" ]]; then
-      curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage"            -d chat_id="$TG_CHAT_ID"            -d text="$MESSAGE" > /dev/null
+  else
+    # 解码并检查是否包含协议
+    DECODED=$(echo "$BODY" | base64 -d 2>/dev/null)
+    if echo "$DECODED" | grep -qE '^(vmess|vless|trojan|ss|ssr)://'; then
+      continue
+    else
+      MESSAGE="[$TIMESTAMP] ❌ $URL invalid decoded content"
+      echo "$MESSAGE" >> "$LOG_FILE"
     fi
+  fi
 
-    # 邮件通知（如有配置 & 系统支持）
-    if [[ -n "$EMAIL" ]]; then
-      command -v mail >/dev/null 2>&1 && echo "$MESSAGE" | mail -s "URL 检测失败: $URL" "$EMAIL"
-    fi
+  # 通知（仅当出错）
+  if [[ -n "$TG_BOT_TOKEN" && -n "$TG_CHAT_ID" ]]; then
+    curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage"          -d chat_id="$TG_CHAT_ID"          -d text="$MESSAGE" > /dev/null
+  fi
+
+  if [[ -n "$EMAIL" ]]; then
+    command -v mail >/dev/null 2>&1 && echo "$MESSAGE" | mail -s "URL 检测失败: $URL" "$EMAIL"
   fi
 done
