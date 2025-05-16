@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>自动任务管理</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 10px; width: 420px; }
+  input, button { margin: 5px 0; width: 100%; padding: 6px; box-sizing: border-box; }
+  .task { border: 1px solid #ccc; margin: 6px 0; padding: 6px; border-radius: 4px; }
+  button { cursor: pointer; }
+  .task button { width: 48%; margin-right: 4%; }
+  .task button:last-child { margin-right: 0; }
+</style>
+</head>
+<body>
+<h2>每隔N天打开网页</h2>
+<input id="url" type="text" placeholder="网址，如 https://example.com" />
+<input id="interval" type="number" min="1" placeholder="间隔天数" />
+<button id="addTask">添加任务</button>
+<div id="taskList"></div>
+
+<h2>每隔N分钟后台访问网址</h2>
+<input id="bg-url" type="text" placeholder="网址，如 https://example.com" />
+<input id="bg-interval" type="number" min="1" placeholder="间隔分钟" />
+<button id="addBgTask">添加后台访问任务</button>
+<div id="bgTaskList"></div>
+
+<h2>定时刷新标签页（地址前缀）</h2>
+<input id="refresh-url" type="text" placeholder="标签页地址前缀，如 https://example.com/dashboard" />
+<input id="refresh-interval" type="number" min="1" placeholder="间隔分钟" />
+<button id="addRefreshTask">添加刷新任务</button>
+<div id="refreshTaskList"></div>
+
+<script src="popup.js"></script>
+</body>
+</html>
